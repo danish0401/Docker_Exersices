@@ -1,0 +1,71 @@
+version: '3.2'
+
+# Run as
+# docker-compose build; docker-compose up -d
+# Check with
+# docker ps
+# Then check the logs with
+# docker logs --tail 50 $container_id
+# docker-compose images
+# docker-compose logs --tail 20 repo_name
+
+
+services:
+
+  redis:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - '6379'    
+    networks:
+      - new
+
+  python_app:
+    restart: always
+    build:
+      context: ./flask
+      dockerfile: Dockerfile
+    ports:
+      - '5000'    
+    depends_on:
+      - redis
+    networks:
+      - new
+
+  proxy_nginx:
+    build: 
+      dockerfile: Dockerfile
+      context: ./proxy_nginx
+    ports:
+      - 80:80
+    depends_on:
+      - main_nginx
+    restart: always
+    networks:
+      - new
+
+  main_nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./main_nginx
+    ports:
+      - '81'
+    volumes:
+      - type: bind
+        source: ./main_nginx/index
+        target: /usr/share/nginx/html
+    depends_on:
+      - python_app
+    networks:
+      - new
+
+networks:
+  new:
+    driver: bridge
+    

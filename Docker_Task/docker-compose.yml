@@ -1,0 +1,40 @@
+version: '3.2'
+
+# Run as
+# docker-compose build; docker-compose up -d
+# Check with
+# docker ps
+# Then check the logs with
+# docker logs --tail 50 $container_id
+# docker-compose images
+# docker-compose logs --tail 20 repo_name
+
+
+services:
+
+  app_bcknd:
+    restart: always
+    build:
+      context: ./app_bcknd
+      dockerfile: Dockerfile
+    ports:
+      - '8080'    
+    networks:
+      - new
+
+  nginx_frnt_end:
+    build: 
+      dockerfile: Dockerfile
+      context: ./nginx_frnt_end
+    ports:
+      - 80:80
+    depends_on:
+      - app_bcknd
+    restart: always
+    networks:
+      - new
+
+networks:
+  new:
+    driver: bridge
+    

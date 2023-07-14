@@ -1,0 +1,5 @@
+docker run -d -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=supersecret -e MONGO_INITDB_DATABASE=notadmin -e MONGO_NON_ROOT_USERNAME=normal -e MONGO_NON_ROOT_PASSWORD=secret --name some-mongo custom-mongo
+
+docker run -d -p 8080:80 -v '/home/danish/Documents/Docker/nginx':'/usr/share/nginx/html' nginx
+
+docker build --build-arg ACCESS_KEY_ID=AKIAXEFPMSBJM422IPGW --build-arg SECRET_ACCESS_KEY=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 --build-arg DEFAULT_REGION=us-west-2 -t danish_image .

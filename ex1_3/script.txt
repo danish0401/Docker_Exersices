@@ -1,0 +1,3 @@
+docker run -d -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=supersecret -e MONGO_INITDB_DATABASE=notadmin -e MONGO_NON_ROOT_USERNAME=normal -e MONGO_NON_ROOT_PASSWORD=secret --name some-mongo mongo
+
+docker run -d --env-file env.list  mongo
